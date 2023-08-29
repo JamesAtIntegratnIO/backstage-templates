@@ -7,3 +7,4 @@ metadata:
 spec:
   targets:
     - ./infra-demo/template.yaml
+    - ./python-sample-app/template.yaml
