@@ -1,0 +1,173 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: python-sample-app
+  title: Python Sample App
+  description: A sample Python app template
+spec:
+  type: website
+  owner: James Dreier
+  lifecycle: experimental
+  tags:
+    - demo
+  parameters:
+    - title: Basic Info
+      required:
+        - name
+        - owner
+        - repoUrl
+      properties:
+        name:
+          title: Name
+          type: string
+          description: Unique name to be deployed
+          ui:autofocus: true
+          ui:options:
+            rows: 5
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+        repoUrl:
+          title: Repository URL
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+    - title: Deployment Info
+      required:
+        - namespace
+      properties:
+        namespace:
+          title: Namespace
+          type: string
+          description: The namespace to deploy to
+          ui:autofocus: true
+        deploymentName:
+          title: Deployment Name
+          type: string
+          description: The name of the deployment
+          ui:autofocus: true
+        replicas:
+          title: Replicas
+          type: number
+          description: The number of replicas to deploy
+          default: 1
+          minimum: 1
+          maximum: 10
+        image:
+          title: Image
+          type: string
+          description: The image to deploy
+          default: registry.k8s.integratn.tech/python-sample-app:latest
+        memoryRequest:
+          title: Memory Request
+          type: string
+          description: The memory request for the deployment
+          default: 128Mi
+        memoryLimit:
+          title: Memory Limit
+          type: string
+          description: The memory limit for the deployment
+          default: 256Mi
+        cpuRequest:
+          title: CPU Request
+          type: string
+          description: The CPU request for the deployment
+          default: 100m
+        cpuLimit:
+          title: CPU Limit
+          type: string
+          description: The CPU limit for the deployment
+          default: 200m
+        port:
+          title: Port
+          type: number
+          description: The port to expose
+          default: 5000
+          minimum: 1
+          maximum: 65535
+    - title: Persistent Volume Info
+      required:
+        - storageClassName
+        - storageSize
+      properties:
+        storageClassName:
+          title: Storage Class Name
+          type: string
+          description: The storage class name
+          default: nfs-client
+          enum:
+            - nfs-client
+            - data-nfs-client
+            - local-path
+        storageSize:
+          title: Storage Size
+          type: string
+          description: The storage size
+          default: 1Gi
+        accessMode:
+          title: Access Mode
+          type: string
+          description: The access mode
+          default: ReadWriteOnce
+          enum:
+            - ReadWriteMany
+            - ReadWriteOnce
+            - ReadOnlyMany
+    - title: Ingress Info
+      required:
+        - ingressHost
+      properties:
+        ingressHost:
+          title: Ingress Host
+          type: string
+          description: The ingress host
+          default: python-sample-app
+        ingressDomain:
+          title: Ingress Domain
+          type: string
+          description: The ingress domain
+          default: k8s.integratn.tech
+  steps:
+    - id: fetch-base
+      name: Fetch Base
+      action: fetch:template
+      input:
+        url: ./template
+        values:
+          name: ${{ parameters.name }}
+          owner: ${{ parameters.owner }}
+          namespace: ${{ parameters.namespace }}
+          deploymentName: ${{ parameters.deploymentName }}
+          replicas: ${{ parameters.replicas }}
+          image: ${{ parameters.image }}
+          memoryRequest: ${{ parameters.memoryRequest }}
+          memoryLimit: ${{ parameters.memoryLimit }}
+          cpuRequest: ${{ parameters.cpuRequest }}
+          cpuLimit: ${{ parameters.cpuLimit }}
+          port: ${{ parameters.port }}
+          storageClassName: ${{ parameters.storageClassName }}
+          storageSize: ${{ parameters.storageSize }}
+          accessMode: ${{ parameters.accessMode }}
+          ingressHost: ${{ parameters.ingressHost }}
+          ingressDomain: ${{ parameters.ingressDomain }}
+    - id: publish
+      name: Publish
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: This is ${{ parameters.name }}
+        repoUrl: ${{ parameters.repoUrl }}
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
+    
