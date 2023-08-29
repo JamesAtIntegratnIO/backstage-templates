@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: templates
+  description: a collection of templates
+
+spec:
+  targets:
+    - ./infra-demo/template.yaml

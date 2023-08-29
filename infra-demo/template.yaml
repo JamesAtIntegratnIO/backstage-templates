@@ -1,0 +1,122 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: infra-demo-template
+  title: Infra Demo Template
+  description: An example template for terraform.
+  # Example for optional annotations
+  # annotations:
+  #   github.com/project-slug: backstage/backstage
+  #   backstage.io/techdocs-ref: dir:.
+spec:
+  type: infrastructure
+  owner: James Dreier
+  lifecycle: experimental
+  tags:
+    - demo
+
+
+# Steps that will be rendered in the fronted with the form input
+# Relies on https://rjsf-team.github.io/react-jsonschema-form/docs/
+  parameters:
+    - title: Basic Info
+      required:
+        - name
+        - owner
+        - repoUrl
+      properties:
+        name:
+          title: Name
+          type: string
+          description: Unique name to be deployed
+          ui:autofocus: true
+          ui:options:
+            rows: 5
+        owner:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+        repoUrl:
+          title: Repository URL
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+        projectId:
+          title: GCP Project ID
+          type: string
+          description: The desired ID of your project
+        projectName:
+          title: GCP Project Name
+          type: string
+          description: The name of your project
+        projectOrg:
+          title: GCP Owner Orginization
+          type: string
+          description: the Organization that your project belongs to
+        members:
+          title: Members
+          type: array
+          items:
+            type: string
+          description: list of emails to populate terraform list(string) and recieve comptue:admin
+          
+          
+  
+  # These are the steps that are going to be performed in order on the scaffolder backend
+  steps:
+    # This step fetches the template files into the working directory
+    - id: fetch-base
+      name: Fetch Base
+      action: fetch:template
+      input:
+        url: ./template
+        values:
+          name: ${{ parameters.name }}
+          owner: ${{ parameters.owner }}
+          projectId: ${{ parameters.projectId }}
+          projectName: ${{ parameters.projectName }}
+          projectOrg: ${{ parameters.projectOrg }}
+          members: ${{ parameters.members }}
+
+    # This step shows an example of fetching a doc starter and adding it to the project
+    # to encourage proper documentation
+    - id: fetch-docs
+      name: Fetch Docs
+      action: fetch:template
+      input:
+        targetPath: ./docs
+        url: https://github.com/JamesAtIntegratnIO/backstage-demo/tree/main/templates/docs
+        values:
+          name: ${{ parameters.name }}
+    # This step publishes the templated output of the working directory to GitHub
+    - id: publish
+      name: Publish
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: This is ${{ parameters.name }}
+        repoUrl: ${{ parameters.repoUrl }}
+        defaultBranch: main
+        protectDefaultBranch: true
+        
+    # This final step will register our new component in the catalog
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
+  # Outputs are displayed to the user after a successful execution of the template
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps['publish'].output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps['register'].output.entityRef }}
