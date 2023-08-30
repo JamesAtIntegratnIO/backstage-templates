@@ -169,7 +169,7 @@ spec:
       input:
         url: ./templates
         templateFileExtension: true
-        targetPath: ./apps/${{ parameters.namenamespace }}/${{ parameters.name }}
+        targetPath: ./apps/${{ parameters.namespace }}/${{ parameters.name }}
         values:
           name: ${{ parameters.name }}
           owner: ${{ parameters.owner }}
