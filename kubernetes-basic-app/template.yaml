@@ -167,7 +167,7 @@ spec:
       name: Fetch Base
       action: fetch:template
       input:
-        url: ./template
+        url: ./templates
         targetPath: ./apps/${{ parameters.namenamespace }}/${{ parameters.name }}
         values:
           name: ${{ parameters.name }}
