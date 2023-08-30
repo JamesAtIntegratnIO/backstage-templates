@@ -173,6 +173,7 @@ spec:
         values:
           name: ${{ parameters.name }}
           owner: ${{ parameters.owner }}
+          repoUrl: ${{ parameters.repoUrl }}
           namespace: ${{ parameters.namespace }}
           deploymentName: ${{ parameters.deploymentName }}
           replicas: ${{ parameters.replicas }}
