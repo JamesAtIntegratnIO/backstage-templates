@@ -201,11 +201,3 @@ spec:
         repoUrl: ${{ parameters.repoUrl }}
         branchName: add-${{ parameters.name }}
         commitMessage: Add ${{ parameters.name }}
-        
-    - id: register
-      name: Register
-      action: catalog:register
-      input:
-        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
-        catalogInfoPath: '/catalog-info.yaml'
-    
