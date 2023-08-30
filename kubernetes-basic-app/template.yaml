@@ -1,9 +1,9 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: kubernetes-basic-app
-  title: Kubernetes Basic App
-  description: A sample Kubernetes app template
+  name: ASKregen
+  title: ASKregen Deployment
+  description: A Template to deloy and test ASKregen
 spec:
   type: service
   owner: James
