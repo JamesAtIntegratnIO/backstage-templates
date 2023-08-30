@@ -173,7 +173,7 @@ spec:
         values:
           name: ${{ parameters.name }}
           owner: ${{ parameters.owner }}
-          repoUrl: ${{ parameters.repoUrl }}
+          repoUrl: https://${{ parameters.repoUrl | parseRepoUrl | pick('host') }}/${{ parameters.repoUrl | parseRepoUrl | pick('owner') }}/${{ parameters.repoUrl | parseRepoUrl | pick('repo') }}
           namespace: ${{ parameters.namespace }}
           deploymentName: ${{ parameters.deploymentName }}
           replicas: ${{ parameters.replicas }}
