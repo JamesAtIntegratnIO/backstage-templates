@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ${{ values.name }}
+  namespace: argocd
+  annotations: 
+    # argocd-image-updater.argoproj.io/write-back-method: kustomization
+    # argocd-image-updater.argoproj.io/git-branch: main
+    # argocd-image-updater.argoproj.io/image-list: python-sample-app
+spec:
+  project: infra
+  source:
+    repoURL: ${{ values.repoURL }}
+    targetRevision: HEAD
+    path: apps/${{ values.namespace }}/${{ values.name }}
+  destination:
+    name: in-cluster
+    namespace: ${{ values.namespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ${{ values.name }}-pv
+spec:
+  capacity:
+    storage: ${{ values.storageSize }}
+  volumeMode: Filesystem
+  accessModes:
+    - ${{ values.accessMode }}
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: ${{ values.storageClassName }}
+  {% if 'nfs' in values.storageClassName %}
+  nfs:
+    server: ${{ values.nfsServer }}
+    path: ${{ values.nfsPath }}
+  {% endif %}
+  {% if values.storageClassName == 'local-storage' %}
+  local:
+    path: ${{ values.localPath }}
+  {% endif %}
+  

@@ -1,5 +1,8 @@
 {
     "yaml.schemas": {
-        "https://json.schemastore.org/yamllint.json": "file:///home/boboysdadda/projects/backstage-templates/python-sample-app/template.yaml"
+        "https://json.schemastore.org/yamllint.json": [
+            "file:///home/boboysdadda/projects/backstage-templates/python-sample-app/template.yaml",
+            "file:///home/boboysdadda/projects/backstage-templates/kubernetes-basic-app/template.yaml"
+        ]
     }
 }

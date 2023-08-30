@@ -5,6 +5,6 @@ metadata:
   annotations:
     backstage.io/techdocs-ref: dir:.
 spec:
-  type: service
+  type: website
   owner: user:guest
   lifecycle: experimental

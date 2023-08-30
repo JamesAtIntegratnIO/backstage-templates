@@ -1,15 +1,16 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: python-sample-app
-  title: Python Sample App
-  description: A sample Python app template
+  name: kubernetes-basic-app
+  title: Kubernetes Basic App
+  description: A sample Kubernetes app template
 spec:
   type: website
-  owner: James Dreier
+  owner: James
   lifecycle: experimental
   tags:
     - demo
+    - kubernetes
   parameters:
     - title: Basic Info
       required:
@@ -137,8 +138,16 @@ spec:
                   title: NFS Path
                   type: string
                   description: The NFS path
-                  default: /mnt/user/kube_storage/${{ parameters.name }}
-                  
+                  default: /mnt/user/kube_storage/python-sample-app
+            - properties:
+                storageClassName:
+                  enum:
+                    - local-storage
+                localPath:
+                  title: Local Path
+                  type: string
+                  description: The local path
+                  default: /mnt/local/python-sample-app 
     - title: Ingress Info
       required:
         - ingressHost
