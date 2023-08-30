@@ -168,6 +168,7 @@ spec:
       action: fetch:template
       input:
         url: ./template
+        targetPath: ./apps/${{ parameters.namenamespace }}/${{ parameters.name }}
         values:
           name: ${{ parameters.name }}
           owner: ${{ parameters.owner }}
@@ -185,13 +186,21 @@ spec:
           accessMode: ${{ parameters.accessMode }}
           ingressHost: ${{ parameters.ingressHost }}
           ingressDomain: ${{ parameters.ingressDomain }}
+          nfsServer: ${{ parameters.nfsServer }}
+          nfsPath: ${{ parameters.nfsPath }}
+          localPath: ${{ parameters.localPath }}
+    
     - id: publish
-      name: Publish
-      action: publish:github
+      name: publish
+      action: publish:github:pull-request
       input:
-        allowedHosts: ['github.com']
-        description: This is ${{ parameters.name }}
+        title: Add ${{ parameters.name }}
+        description: |
+          This PR adds ${{ parameters.name }} to the catalog.
         repoUrl: ${{ parameters.repoUrl }}
+        branchName: add-${{ parameters.name }}
+        commitMessage: Add ${{ parameters.name }}
+        
     - id: register
       name: Register
       action: catalog:register
