@@ -13,10 +13,10 @@ spec:
   ingressClassName: "nginx"
   tls:
   - hosts:
-    - ${{ values.ingressHost }}.${{ values.domain }}
+    - ${{ values.ingressHost }}.${{ values.ingressDomain }}
     secretName: ${{ values.ingressHost }}-tls
   rules:
-  - host: ${{ values.ingressHost }}.${{ values.domain }}
+  - host: ${{ values.ingressHost }}.${{ values.ingressDomain }}
     http:
       paths:
       - pathType: Prefix
