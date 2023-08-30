@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: ${{ values.name }}
   labels:
-    name: ${{ values.name }}
+    app: ${{ values.name }}
   namespace: ${{ values.namespace }}
   annotations:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"

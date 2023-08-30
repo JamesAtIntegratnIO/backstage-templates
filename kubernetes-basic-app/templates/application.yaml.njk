@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: ${{ values.name }}
   namespace: argocd
+  labels:
+    app: ${{ values.name }}
   annotations: 
     # argocd-image-updater.argoproj.io/write-back-method: kustomization
     # argocd-image-updater.argoproj.io/git-branch: main
