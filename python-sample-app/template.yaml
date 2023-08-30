@@ -106,18 +106,6 @@ spec:
             - nfs-client
             - data-nfs-client
             - local-path
-        {% if 'nfs' in parameters.storageClassName %}
-        nfsServer:
-          title: NFS Server
-          type: string
-          description: The NFS server
-          default: 10.0.3.1
-        nfsPath:
-          title: NFS Path
-          type: string
-          description: The NFS path
-          default: /mnt/user/kube_storage/${{ parameters.name }}
-        {% endif %}
         storageSize:
           title: Storage Size
           type: string
@@ -132,6 +120,25 @@ spec:
             - ReadWriteMany
             - ReadWriteOnce
             - ReadOnlyMany
+      dependencies:
+        storageClassName:
+          oneOf:
+            - properties:
+                storageClassName:
+                  enum:
+                    - nfs-client
+                    - data-nfs-client
+                nfsServer:
+                  title: NFS Server
+                  type: string
+                  description: The NFS server
+                  default: 10.0.3.1
+                nfsPath:
+                  title: NFS Path
+                  type: string
+                  description: The NFS path
+                  default: /mnt/user/kube_storage/${{ parameters.name }}
+                  
     - title: Ingress Info
       required:
         - ingressHost
