@@ -5,6 +5,13 @@ metadata:
   description: a collection of templates
 
 spec:
+  owner: user:guest
+  tags:
+    - template
+  links: 
+    - url: https://github.com/jamesatintegratn.io/backstage-templates
+      title: Templates
+      icon: github
   targets:
     - ./infra-demo/template.yaml
     - ./kubernetes-basic-app/template.yaml
