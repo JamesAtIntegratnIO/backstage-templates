@@ -5,7 +5,7 @@ metadata:
   title: Kubernetes Basic App
   description: A sample Kubernetes app template
 spec:
-  type: website
+  type: service
   owner: James
   lifecycle: experimental
   tags:
@@ -133,7 +133,7 @@ spec:
                   title: NFS Server
                   type: string
                   description: The NFS server
-                  default: 10.0.3.1
+                  default: 10.0.0.12
                 nfsPath:
                   title: NFS Path
                   type: string
